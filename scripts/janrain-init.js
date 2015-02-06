@@ -202,39 +202,26 @@ function janrainCaptureWidgetOnLoad() {
 
     //---- CAPTURE SESSION EVENTS FOR LIVEFYRE--------------------------------------------------
 janrain.events.onCaptureSessionCreated.addHandler(function(result){
-    if(console && console.log){
-        console.log('onCaptureSessionCreated');
-        if(result) console.log(result);
-     }
-     var uuid = janrain.capture.ui.getProfileCookieData('uuid');
-     var dn = janrain.capture.ui.getProfileCookieData('displayName');
-
-    if (window.XMLHttpRequest)
-      {// code for IE7+, Firefox, Chrome, Opera, Safari
-      xmlhttp=new XMLHttpRequest();
-      }
-    else
-      {// code for IE6, IE5
-      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-    xmlhttp.onreadystatechange=function()
-      {
-      if (xmlhttp.readyState==4 && xmlhttp.status==200)
-        {
-          data = JSON.parse(xmlhttp.responseText);
-          console.log(data);
-          Livefyre.require(['auth'], function (auth) {
-            auth.authenticate({livefyre: data.lf_token});
-          });
+    var token = result.accessToken;
+    var xmlhttp;
+    if (window.XMLHttpRequest) {
+        xmlhttp=new XMLHttpRequest();
+    } else {
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            data = JSON.parse(xmlhttp.responseText);
+            Livefyre.require(['auth'], function (auth) {
+                auth.authenticate({livefyre: data.lf_token});
+           });
         }
-      }
-     ///////////////////////////////////////////////////////
-     // UPDATE THIS URL:
-     ///////////////////////////////////////////////////////
+    }
+    // UPDATE THIS URL:
     xmlhttp.open("POST","/livefyre_poc/POC_Server/Token.php",true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xmlhttp.setRequestHeader("Connection", "close");
-    xmlhttp.send("uuid="+encodeURIComponent(uuid)+"&dn="+encodeURIComponent(dn));
+    xmlhttp.send("token="+encodeURIComponent(token));
 });
 
 janrain.events.onCaptureProfileSaveSuccess.addHandler(function(result){
@@ -266,7 +253,6 @@ janrain.events.onCaptureProfileSaveSuccess.addHandler(function(result){
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xmlhttp.send("uuid="+uuid);
 });
-
 
 janrain.events.onCaptureSessionEnded.addHandler(function(result){
     if(console && console.log){
