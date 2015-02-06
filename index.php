@@ -97,9 +97,9 @@ $root = $_SERVER['DOCUMENT_ROOT'];
          * Arguments are delegate parameter and an author parameter
          * Used any time a view profile event is triggered
          */
-        viewProfile: function(delegate, author) {
-            janrain.capture.ui.modal.open("editProfileModal");
-            if(console && console.log) console.log(author);
+        viewProfile: function(user) {
+            user_id = user.id.split("@")[0];
+            janrain.capture.ui.getPublicProfile('publicProfileModal', user_id);
         },
         /**janrain.capture.ui.renderScreen('editProfile')
          * Edit profile function
