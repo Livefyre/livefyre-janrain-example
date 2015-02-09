@@ -4,13 +4,13 @@
 	require_once $root."/vendor/autoload.php";
 	use Livefyre\Livefyre;
 
-	$network = Livefyre::getNetwork("client-solutions-janrain.fyre.co", "JWoQdZ4ZpKxMYd2qVyEYCw+Oimo=");
+	$network = Livefyre::getNetwork("", "");
 	$userAuthToken = $network->buildLivefyreToken();
 
 	$uuid = $_POST["uuid"];
 
 	//set POST variables
-	$url = 'https://client-solutions-janrain.quill.fyre.co/api/v3_0/user/'.$uuid.'/refresh';
+	$url = 'https://<network name>.quill.fyre.co/api/v3_0/user/'.$uuid.'/refresh';
 	$fields_string = 'lftoken='.urlencode($userAuthToken);
 	//open connection
 	$ch = curl_init();

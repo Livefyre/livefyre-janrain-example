@@ -201,82 +201,95 @@ function janrainCaptureWidgetOnLoad() {
 
 
     //---- CAPTURE SESSION EVENTS FOR LIVEFYRE--------------------------------------------------
-janrain.events.onCaptureSessionCreated.addHandler(function(result){
-    var token = result.accessToken;
-    var xmlhttp;
-    if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
-    } else {
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            data = JSON.parse(xmlhttp.responseText);
-            Livefyre.require(['auth'], function (auth) {
+    janrain.events.onCaptureSessionCreated.addHandler(function(result){
+        if(console && console.log){
+            console.log('onCaptureSessionCreated');
+            if(result) console.log(result);
+         }
+         var token = result.accessToken;
+
+        if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {// code for IE6, IE5
+          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+        xmlhttp.onreadystatechange=function()
+          {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+              data = JSON.parse(xmlhttp.responseText);
+              console.log(data);
+              Livefyre.require(['auth'], function (auth) {
                 auth.authenticate({livefyre: data.lf_token});
-           });
+              });
+            }
+          }
+         ///////////////////////////////////////////////////////
+         // UPDATE THIS URL:
+         ///////////////////////////////////////////////////////
+        xmlhttp.open("POST","/livefyre_poc/POC_Server/Token.php",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.setRequestHeader("Connection", "close");
+        xmlhttp.send("token="+encodeURIComponent(token));
+    });
+
+    janrain.events.onCaptureProfileSaveSuccess.addHandler(function(result){
+        if(console && console.log){
+            console.log('onCaptureProfileSaveSuccess');
+            if(result) console.log(result);
         }
-    }
-    // UPDATE THIS URL:
-    xmlhttp.open("POST","/livefyre_poc/POC_Server/Token.php",true);
-    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.setRequestHeader("Connection", "close");
-    xmlhttp.send("token="+encodeURIComponent(token));
-});
+        var uuid = janrain.capture.ui.getProfileCookieData('uuid');
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {// code for IE6, IE5
+          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+        xmlhttp.onreadystatechange=function()
+          {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                //do things
+            }
+          }
+         ///////////////////////////////////////////////////////
+         // UPDATE THIS URL:
+         ///////////////////////////////////////////////////////
+        xmlhttp.open("POST","/livefyre_poc/POC_Server/ping4pull.php",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send("uuid="+uuid);
+    });
 
-janrain.events.onCaptureProfileSaveSuccess.addHandler(function(result){
-    if(console && console.log){
-        console.log('onCaptureProfileSaveSuccess');
-        if(result) console.log(result);
-    }
-    var uuid = janrain.capture.ui.getProfileCookieData('uuid');
-    var xmlhttp;
-    if (window.XMLHttpRequest)
-      {// code for IE7+, Firefox, Chrome, Opera, Safari
-      xmlhttp=new XMLHttpRequest();
-      }
-    else
-      {// code for IE6, IE5
-      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-    xmlhttp.onreadystatechange=function()
-      {
-      if (xmlhttp.readyState==4 && xmlhttp.status==200)
-        {
-            //do things
-        }
-      }
-     ///////////////////////////////////////////////////////
-     // UPDATE THIS URL:
-     ///////////////////////////////////////////////////////
-    xmlhttp.open("POST","/livefyre_poc/POC_Server/ping4pull.php",true);
-    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.send("uuid="+uuid);
-});
 
-janrain.events.onCaptureSessionEnded.addHandler(function(result){
-    if(console && console.log){
-        console.log('onCaptureSessionEnded');
-        if(result) console.log(result);
-     }
-     Livefyre.require(['auth'], function (auth) {
-            auth.logout();
-          });
-});
+    janrain.events.onCaptureSessionEnded.addHandler(function(result){
+        if(console && console.log){
+            console.log('onCaptureSessionEnded');
+            if(result) console.log(result);
+         }
+         Livefyre.require(['auth'], function (auth) {
+                auth.logout();
+              });
+    });
 
-janrain.events.onCaptureSessionFound.addHandler(function(result){
-    if(console && console.log){
-        console.log('onCaptureSessionFound');
-        if(result) console.log(result);
-     }
-});
+    janrain.events.onCaptureSessionFound.addHandler(function(result){
+        if(console && console.log){
+            console.log('onCaptureSessionFound');
+            if(result) console.log(result);
+         }
+    });
 
-janrain.events.onCaptureSessionNotFound.addHandler(function(result){
-    if(console && console.log){
-        console.log('onCaptureSessionNotFound');
-        if(result) console.log(result);
-     }
-});
+    janrain.events.onCaptureSessionNotFound.addHandler(function(result){
+        if(console && console.log){
+            console.log('onCaptureSessionNotFound');
+            if(result) console.log(result);
+         }
+    });
 
 
     /*--

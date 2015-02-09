@@ -1,17 +1,3 @@
-<?php
-$root = $_SERVER['DOCUMENT_ROOT'];
-    require_once $root."/vendor/autoload.php";
-    use Livefyre\Livefyre;
-
-    $network = Livefyre::getNetwork("", "");
-    $network->setSsl(false);
-    $site = $network->getSite("", "");
-    $collection = $site->buildCommentsCollection("", "", "");
-    $collection->createOrUpdate();
-
-    $meta = $collection->buildCollectionMetaToken();
-    $check = $collection->buildChecksum();
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,12 +37,12 @@ $root = $_SERVER['DOCUMENT_ROOT'];
   (function() {
     Livefyre.require(['fyre.conv#3','auth'], function(Conv, auth) {
       new Conv({
-        network: ''
+        network: 'client-solutions-janrain.fyre.co'
         
         }, [{
           app: 'main',
-          siteId: '',
-          articleId: '',
+          siteId: '345833',
+          articleId: 'janrain-1381940039319',
           el: 'livefyre-app-janrain-1381940039319',
           
         }], function (widget) {
@@ -100,32 +86,22 @@ $root = $_SERVER['DOCUMENT_ROOT'];
         viewProfile: function(user) {
             user_id = user.id.split("@")[0];
             janrain.capture.ui.getPublicProfile('publicProfileModal', user_id);
+            if(console && console.log) console.log(user);
         },
         /**janrain.capture.ui.renderScreen('editProfile')
          * Edit profile function
          * Arguments are delegate parameter and an author parameter
          * Used any time an edit profile event is triggered
          */
-        editProfile: function(delegate, author) {
+        editProfile: function(author) {
             janrain.capture.ui.modal.open("editProfileModal");
             if(console && console.log) console.log(author);
         }
-
       });
     });
-
-
   }());
 
   </script>
-
-
-
-
-    
-
-
-
 
     <!--
     ============================================================================
